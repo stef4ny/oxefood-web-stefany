@@ -9,7 +9,7 @@ export default function FormProduto () {
     const [descricao, setDescricao] = useState();
     const [valorUnitario, setValorUnitario] = useState();
     const [tempoEntregaMinimo, setTempoEntregaMinino] = useState();
-    const [tempoentregaMaximo, setTempoentregaMaximo] = useState();
+    const [tempoEntregaMaximo, setTempoEntregaMaximo] = useState();
 
 
     function salvar() {
@@ -20,7 +20,7 @@ export default function FormProduto () {
              descricao: descricao,
              valorUnitario: valorUnitario,
              tempoEntregaMinimo: tempoEntregaMinimo,
-             tempoEntregaMaximo: tempoentregaMaximo
+             tempoEntregaMaximo: tempoEntregaMaximo
 		     
 		}
 	
@@ -124,8 +124,8 @@ export default function FormProduto () {
                                     fluid
                                     label='Tempo de Entrega Máximo em Minutos'
                                     width={6}
-                                    value={tempoentregaMaximo}
-                                      onChange={e => setTempoentregaMaximo(e.target.value)}
+                                    value={tempoEntregaMaximo}
+                                      onChange={e => setTempoEntregaMaximo(e.target.value)}
                                 >
                                     <InputMask 
                                         
