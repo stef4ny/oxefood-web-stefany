@@ -5,6 +5,7 @@ import './App.css';
 //import FormCliente from './views/cliente/FormCliente';
 //import FormProduto from './views/produto/FormProduto';
 import FormEntregador from './views/entregador/FormEntregador';
+//import FormProduto from './views/produto/FormProduto';
 
 function App() {
   return (

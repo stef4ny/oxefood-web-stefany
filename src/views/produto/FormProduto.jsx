@@ -1,8 +1,37 @@
-import React from "react";
+import axios from "axios";
+import React, { useState } from "react";
 import InputMask from 'react-input-mask';
 import { Button, Container, Divider, Form, Icon } from 'semantic-ui-react';
 
 export default function FormProduto () {
+    const [titulo, setTitulo] = useState();
+    const [codigo, setCodigo] = useState();
+    const [descricao, setDescricao] = useState();
+    const [valorUnitario, setValorUnitario] = useState();
+    const [tempoEntregaMinimo, setTempoEntregaMinino] = useState();
+    const [tempoentregaMaximo, setTempoentregaMaximo] = useState();
+
+
+    function salvar() {
+
+		let  produtoRequest = {
+		     titulo: titulo,
+             codigo: codigo,
+             descricao: descricao,
+             valorUnitario: valorUnitario,
+             tempoEntregaMinimo: tempoEntregaMinimo,
+             tempoEntregaMaximo: tempoentregaMaximo
+		     
+		}
+	
+		axios.post("http://localhost:8080/api/produto", produtoRequest)
+		.then((response) => {
+		     console.log('Produto cadastrado com sucesso.')
+		})
+		.catch((error) => {
+		     console.log('Erro ao incluir um produto.')
+		})
+	}
 
     return (
 
@@ -31,6 +60,8 @@ export default function FormProduto () {
                                       required
                                       maskChar={null}
                                       placeholder="Informe o título do produto"
+                                      value={titulo}
+                                      onChange={e => setTitulo(e.target.value)}
                                     />
                                     </Form.Input>
                                
@@ -43,6 +74,8 @@ export default function FormProduto () {
                                         required
                                         maskChar={null}
                                         placeholder="Informe o código do produto"
+                                        value={codigo}
+                                      onChange={e => setCodigo(e.target.value)}
                                     /> 
                                 </Form.Input>
 
@@ -57,6 +90,8 @@ export default function FormProduto () {
                               <InputMask
                                 maskChar={null}
                                 placeholder="Informe a descrição do produto"
+                                value={descricao}
+                                onChange={e => setDescricao(e.target.value)}
                               />
                            </Form.Input>
                             <Form.Group>
@@ -65,13 +100,19 @@ export default function FormProduto () {
                                   required
                                     fluid
                                     label='Valor Unitário'
-                                    width={6}>
+                                    width={6}
+                                    value={valorUnitario}
+                                    onChange={e => setValorUnitario(e.target.value)}
+                                    >
                                 </Form.Input>
 
                                 <Form.Input
                                     fluid
                                     label='Tempo de Entrega Mínimo em Minutos'
-                                    width={6}>
+                                    width={6}
+                                    value={tempoEntregaMinimo}
+                                    onChange={e => setTempoEntregaMinino(e.target.value)}
+                                    >
                                     <InputMask 
                                        
                                          maskChar={null}
@@ -83,6 +124,8 @@ export default function FormProduto () {
                                     fluid
                                     label='Tempo de Entrega Máximo em Minutos'
                                     width={6}
+                                    value={tempoentregaMaximo}
+                                      onChange={e => setTempoentregaMaximo(e.target.value)}
                                 >
                                     <InputMask 
                                         
@@ -116,6 +159,7 @@ export default function FormProduto () {
                                 labelPosition='left'
                                 color='blue'
                                 floated='right'
+                                onClick={() => salvar()}
                             >
                                 <Icon name='save' />
                                 Salvar
