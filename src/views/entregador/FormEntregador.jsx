@@ -250,7 +250,10 @@ export default function FormEntregador () {
                              </Form.Input>
                           
                           <Form.Group>
-                            <Form.Field label="Ativo"></Form.Field>
+                            <Form.Field label="Ativo"
+                             value={ativo}
+                             onChange={e => setAtivo(e.target.value)}
+                             ></Form.Field>
                             <Form.Radio id="sim" name="ativo" value={'sim'} label="Sim"></Form.Radio>
                             <Form.Radio id="não" name="ativo" value={'não'} label="Não"></Form.Radio>
                            
