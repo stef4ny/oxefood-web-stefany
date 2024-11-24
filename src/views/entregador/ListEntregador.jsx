@@ -77,7 +77,7 @@ return(
                                   <Table.Cell>{entregador.nome}</Table.Cell>
                                   <Table.Cell>{entregador.cpf}</Table.Cell>
                                   <Table.Cell>{entregador.rg}</Table.Cell>
-                                  <Table.Cell>{entregador.dataNascimento}</Table.Cell>
+                                  <Table.Cell>{formatarData(entregador.dataNascimento)}</Table.Cell>
                                   <Table.Cell>{entregador.foneCelular}</Table.Cell>
                                   <Table.Cell>{entregador.foneFixo}</Table.Cell>
                                   <Table.Cell>{entregador.qtEntregadorRealizadas}</Table.Cell>
