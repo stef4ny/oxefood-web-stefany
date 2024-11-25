@@ -168,7 +168,7 @@ export default function FormEntregador () {
                                         mask="99/99/9999" 
                                         maskChar={null}
                                         placeholder="Ex: 20/03/1985"
-                                        value={formatarData(entregador.dataNascimento)}
+                                        value={formatarData(dataNascimento)}
                                         onChange={e => setDataNascimento(e.target.value)}  
                                     /> 
                                 </Form.Input>
@@ -301,9 +301,11 @@ export default function FormEntregador () {
                             <Form.Field label="Ativo"
                              value={ativo}
                              onChange={e => setAtivo(e.target.value)}
-                             ></Form.Field>
-                            <Form.Radio id="sim" name="ativo" value={'sim'} label="Sim"></Form.Radio>
-                            <Form.Radio id="não" name="ativo" value={'não'} label="Não"></Form.Radio>
+                             >
+                                <Form.Radio id="sim" name="ativo" value={'sim'} label="Sim"></Form.Radio>
+                                <Form.Radio id="não" name="ativo" value={'não'} label="Não"></Form.Radio>
+                             </Form.Field>
+                            
                            
                             
                           </Form.Group>
@@ -323,7 +325,7 @@ export default function FormEntregador () {
                             >
                                 <Icon name='reply' />
                                 <Link to={'/list-entregador'}>Voltar</Link>
-                                Voltar
+                               
                             </Button>
                                 
                             <Button

@@ -145,7 +145,7 @@ export default function FormCliente() {
                                         mask="99/99/9999"
                                         maskChar={null}
                                         placeholder="Ex: 20/03/1985"
-                                        value={formatarData(cliente.dataNascimento)}
+                                        value={formatarData(dataNascimento)}
                                         onChange={e => setDataNascimento(e.target.value)}
                                     />
                                 </Form.Input>
@@ -165,9 +165,9 @@ export default function FormCliente() {
                                 color='orange'
                             >
                                 <Icon name='reply' />
-                                <Link to={'/list-cliente'}>Voltar</Link>
+                                <Link to={'/list-cliente'}> Voltar</Link>
 
-                                Voltar
+                               
                             </Button>
 
                             <Button

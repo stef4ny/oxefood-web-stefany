@@ -25,7 +25,6 @@ export default function FormProduto () {
                     setCodigo(response.data.codigo)
                     setDescricao(response.data.descricao)
                     setValorUnitario(response.data.valorUnitario)
-                    setFoneFixo(response.data.foneFixo)
                     setTempoEntregaMinino(response.data.tempoEntregaMinimo)
                     setTempoEntregaMaximo(response.data.tempoEntregaMaximo)
 
@@ -51,7 +50,7 @@ export default function FormProduto () {
                 .then((response) => { console.log('Produto alterado com sucesso.') })
                 .catch((error) => { console.log('Erro ao alter um produto.') })
         } else { //Cadastro:
-            axios.post("http://localhost:8080/api/produto", clienteRequest)
+            axios.post("http://localhost:8080/api/produto", produtoRequest)
                 .then((response) => { console.log('Produto cadastrado com sucesso.') })
                 .catch((error) => { console.log('Erro ao incluir o produto.') })
         }
@@ -180,7 +179,7 @@ export default function FormProduto () {
                             >
                                 <Icon name='reply' />
                                 <Link to={'/list-produto'}>Listar</Link>
-                                Listar
+                             
                             </Button>
                                 
                             <Button
