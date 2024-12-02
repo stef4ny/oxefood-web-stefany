@@ -109,7 +109,7 @@ export default function FormEntregador () {
                 {idEntregador === undefined &&
                         <h2> <span style={{ color: 'darkgray' }}> Entregador &nbsp;<Icon name='angle double right' size="small" /> </span> Cadastro</h2>
                     }
-                    {idEntregador != undefined &&
+                    {idEntregador !== undefined &&
                         <h2> <span style={{ color: 'darkgray' }}> Entregador &nbsp;<Icon name='angle double right' size="small" /> </span> Alteração</h2>
                     }
 

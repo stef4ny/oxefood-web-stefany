@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Button, Container, Divider, Icon, Table, Modal, Header, TableBody } from 'semantic-ui-react';
+import { Button, Container, Divider, Icon, Table, Modal, Header } from 'semantic-ui-react';
 import MenuSistema from '../../MenuSistema';
 
 export default function ListProduto() {

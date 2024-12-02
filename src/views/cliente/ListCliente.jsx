@@ -102,6 +102,7 @@ export default function ListCliente() {
                                         <Table.Cell>{cliente.foneCelular}</Table.Cell>
                                         <Table.Cell>{cliente.foneFixo}</Table.Cell>
                                         <Table.Cell textAlign='center'>
+                                            
                                             <Button
                                                 inverted
                                                 circular

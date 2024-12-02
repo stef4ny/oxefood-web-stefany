@@ -68,7 +68,7 @@ export default function FormProduto () {
                 {idProduto === undefined &&
                         <h2> <span style={{ color: 'darkgray' }}> Produto &nbsp;<Icon name='angle double right' size="small" /> </span> Cadastro</h2>
                     }
-                    {idProduto != undefined &&
+                    {idProduto !== undefined &&
                         <h2> <span style={{ color: 'darkgray' }}> Produto &nbsp;<Icon name='angle double right' size="small" /> </span> Alteração</h2>
                     }
 
