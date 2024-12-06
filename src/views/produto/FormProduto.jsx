@@ -5,7 +5,7 @@ import { Button, Container, Divider, Form, Icon } from 'semantic-ui-react';
 import MenuSistema from '../../MenuSistema';
 import { Link, useLocation } from "react-router-dom";
 
-export default function FormProduto () {
+export default function FormProduto() {
 
     const { state } = useLocation();
     const [idProduto, setIdProduto] = useState();
@@ -15,6 +15,9 @@ export default function FormProduto () {
     const [valorUnitario, setValorUnitario] = useState();
     const [tempoEntregaMinimo, setTempoEntregaMinino] = useState();
     const [tempoEntregaMaximo, setTempoEntregaMaximo] = useState();
+    const [listaCategoria, setListaCategoria] = useState([]);
+    const [idCategoria, setIdCategoria] = useState();
+
 
     useEffect(() => {
         if (state != null && state.id != null) {
@@ -27,24 +30,33 @@ export default function FormProduto () {
                     setValorUnitario(response.data.valorUnitario)
                     setTempoEntregaMinino(response.data.tempoEntregaMinimo)
                     setTempoEntregaMaximo(response.data.tempoEntregaMaximo)
+                    setIdCategoria(response.data.categoria.id)
 
                 })
+         
+
         }
+        axios.get("http://localhost:8080/api/categoriaproduto")
+        .then((response) => {
+            const dropDownCategorias = response.data.map(c => ({ text: c.descricao, value: c.id }));
+            setListaCategoria(dropDownCategorias);
+        })
     }, [state])
 
 
     function salvar() {
 
-		let  produtoRequest = {
-		     titulo: titulo,
-             codigo: codigo,
-             descricao: descricao,
-             valorUnitario: valorUnitario,
-             tempoEntregaMinimo: tempoEntregaMinimo,
-             tempoEntregaMaximo: tempoEntregaMaximo
-		     
-		}
-	
+        let produtoRequest = {
+            idCategoria: idCategoria,
+            titulo: titulo,
+            codigo: codigo,
+            descricao: descricao,
+            valorUnitario: valorUnitario,
+            tempoEntregaMinimo: tempoEntregaMinimo,
+            tempoEntregaMaximo: tempoEntregaMaximo
+
+        }
+
         if (idProduto != null) { //Alteração:
             axios.put("http://localhost:8080/api/produto/" + idProduto, produtoRequest)
                 .then((response) => { console.log('Produto alterado com sucesso.') })
@@ -54,18 +66,18 @@ export default function FormProduto () {
                 .then((response) => { console.log('Produto cadastrado com sucesso.') })
                 .catch((error) => { console.log('Erro ao incluir o produto.') })
         }
-	}
+    }
 
     return (
 
         <div>
-                <MenuSistema tela={'produto'} />
+            <MenuSistema tela={'produto'} />
 
-            <div style={{marginTop: '3%'}}>
+            <div style={{ marginTop: '3%' }}>
 
                 <Container textAlign='justified' >
 
-                {idProduto === undefined &&
+                    {idProduto === undefined &&
                         <h2> <span style={{ color: 'darkgray' }}> Produto &nbsp;<Icon name='angle double right' size="small" /> </span> Cadastro</h2>
                     }
                     {idProduto !== undefined &&
@@ -74,7 +86,7 @@ export default function FormProduto () {
 
                     <Divider />
 
-                    <div style={{marginTop: '4%'}}>
+                    <div style={{ marginTop: '4%' }}>
 
                         <Form>
 
@@ -86,14 +98,29 @@ export default function FormProduto () {
                                     label='Título'
                                     maxLength="100">
                                     <InputMask
-                                      required
-                                      maskChar={null}
-                                      placeholder="Informe o título do produto"
-                                      value={titulo}
-                                      onChange={e => setTitulo(e.target.value)}
+                                        required
+                                        maskChar={null}
+                                        placeholder="Informe o título do produto"
+                                        value={titulo}
+                                        onChange={e => setTitulo(e.target.value)}
                                     />
-                                    </Form.Input>
-                               
+                                </Form.Input>
+
+                             
+                                <Form.Select
+                                    required
+                                    fluid
+                                    tabIndex='3'
+                                    placeholder='Selecione'
+                                    label='Categoria'
+                                    options={listaCategoria}
+                                    value={idCategoria}
+                                    onChange={(e, { value }) => {
+                                        setIdCategoria(value)
+                                    }}
+                                />
+
+
 
                                 <Form.Input
                                     required
@@ -104,35 +131,35 @@ export default function FormProduto () {
                                         maskChar={null}
                                         placeholder="Informe o código do produto"
                                         value={codigo}
-                                      onChange={e => setCodigo(e.target.value)}
-                                    /> 
+                                        onChange={e => setCodigo(e.target.value)}
+                                    />
                                 </Form.Input>
 
                             </Form.Group>
 
                             <Form.Input
-                          
-                             fluid
-                             label='Descrição'
-                             maxLength="100"
-                             width={16}>
-                              <InputMask
-                                maskChar={null}
-                                placeholder="Informe a descrição do produto"
-                                value={descricao}
-                                onChange={e => setDescricao(e.target.value)}
-                              />
-                           </Form.Input>
+
+                                fluid
+                                label='Descrição'
+                                maxLength="100"
+                                width={16}>
+                                <InputMask
+                                    maskChar={null}
+                                    placeholder="Informe a descrição do produto"
+                                    value={descricao}
+                                    onChange={e => setDescricao(e.target.value)}
+                                />
+                            </Form.Input>
                             <Form.Group>
 
                                 <Form.Input
-                                  required
+                                    required
                                     fluid
                                     label='Valor Unitário'
                                     width={6}
                                     value={valorUnitario}
                                     onChange={e => setValorUnitario(e.target.value)}
-                                    >
+                                >
                                 </Form.Input>
 
                                 <Form.Input
@@ -141,12 +168,12 @@ export default function FormProduto () {
                                     width={6}
                                     value={tempoEntregaMinimo}
                                     onChange={e => setTempoEntregaMinino(e.target.value)}
-                                    >
-                                    <InputMask 
-                                       
-                                         maskChar={null}
+                                >
+                                    <InputMask
+
+                                        maskChar={null}
                                         placeholder="30"
-                                    /> 
+                                    />
                                 </Form.Input>
 
                                 <Form.Input
@@ -154,20 +181,20 @@ export default function FormProduto () {
                                     label='Tempo de Entrega Máximo em Minutos'
                                     width={6}
                                     value={tempoEntregaMaximo}
-                                      onChange={e => setTempoEntregaMaximo(e.target.value)}
+                                    onChange={e => setTempoEntregaMaximo(e.target.value)}
                                 >
-                                    <InputMask 
-                                        
-                                         maskChar={null}
+                                    <InputMask
+
+                                        maskChar={null}
                                         placeholder="40"
-                                    /> 
+                                    />
                                 </Form.Input>
 
                             </Form.Group>
-                        
+
                         </Form>
-                        
-                        <div style={{marginTop: '4%'}}>
+
+                        <div style={{ marginTop: '4%' }}>
 
                             <Button
                                 type="button"
@@ -179,9 +206,9 @@ export default function FormProduto () {
                             >
                                 <Icon name='reply' />
                                 <Link to={'/list-produto'}>Listar</Link>
-                             
+
                             </Button>
-                                
+
                             <Button
                                 inverted
                                 circular
@@ -198,7 +225,7 @@ export default function FormProduto () {
                         </div>
 
                     </div>
-                    
+
                 </Container>
             </div>
         </div>
