@@ -16,40 +16,53 @@ export default function FormCliente() {
     const [foneFixo, setFoneFixo] = useState();
 
     useEffect(() => {
-        if (state != null && state.id != null) {
-            axios.get("http://localhost:8080/api/cliente/" + state.id)
-                .then((response) => {
-                    setIdCliente(response.data.id)
-                    setNome(response.data.nome)
-                    setCpf(response.data.cpf)
-                    setDataNascimento(response.data.dataNascimento)
-                    setFoneCelular(response.data.foneCelular)
-                    setFoneFixo(response.data.foneFixo)
-                })
-        }
-    }, [state])
 
+        if (state != null && state.id != null) {
+
+            axios.get("http://localhost:8080/api/cliente/" + state.id)
+            .then((response) => {
+                setIdCliente(response.data.id)
+                setNome(response.data.nome)
+                setCpf(response.data.cpf)
+                setDataNascimento(formatarData(response.data.dataNascimento))
+                setFoneCelular(response.data.foneCelular)
+                setFoneFixo(response.data.foneFixo)
+            })
+        }
+
+    }, [state])
 
     function salvar() {
 
-        let clienteRequest = {
-            nome: nome,
-            cpf: cpf,
-            dataNascimento: dataNascimento,
-            foneCelular: foneCelular,
-            foneFixo: foneFixo
-        }
+		let clienteRequest = {
+		    nome: nome,
+		    cpf: cpf,
+		    dataNascimento: dataNascimento,
+		    foneCelular: foneCelular,
+		    foneFixo: foneFixo
+		}
 
         if (idCliente != null) { //Alteração:
+
             axios.put("http://localhost:8080/api/cliente/" + idCliente, clienteRequest)
-                .then((response) => { console.log('Cliente alterado com sucesso.') })
-                .catch((error) => { console.log('Erro ao alter um cliente.') })
+            .then((response) => { 
+                console.log('Cliente alterado com sucesso.') 
+            })
+            .catch((error) => { 
+                console.log('Erro ao alter um cliente.') 
+            })
+
         } else { //Cadastro:
+	
             axios.post("http://localhost:8080/api/cliente", clienteRequest)
-                .then((response) => { console.log('Cliente cadastrado com sucesso.') })
-                .catch((error) => { console.log('Erro ao incluir o cliente.') })
+            .then((response) => {
+                console.log('Cliente cadastrado com sucesso.')
+            })
+            .catch((error) => {
+                console.log('Erro ao incluir o um cliente.')
+            })
         }
-    }
+	}
 
     function formatarData(dataParam) {
 
@@ -154,21 +167,19 @@ export default function FormCliente() {
 
                         </Form>
 
-                        <div style={{ marginTop: '4%' }}>
-
-                            <Button
-                                type="button"
-                                inverted
-                                circular
-                                icon
-                                labelPosition='left'
-                                color='orange'
-                            >
+                        <div style={{marginTop: '4%'}}>
+                            <Link to={'/list-cliente'}>
+                                <Button
+                                    inverted
+                                    circular
+                                    icon
+                                    labelPosition='left'
+                                    color='orange'
+                                >
                                 <Icon name='reply' />
-                                <Link to={'/list-cliente'}> Voltar</Link>
-
-                               
-                            </Button>
+                                Voltar
+                                </Button>
+                            </Link>
 
                             <Button
                                 inverted

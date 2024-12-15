@@ -1,50 +1,76 @@
 import axios from 'axios';
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Button, Container, Divider, Icon, Table, Modal, Header } from 'semantic-ui-react';
+import { Button, Container, Divider, Form, Header, Icon, Menu, Modal, Segment, Table } from 'semantic-ui-react';
 import MenuSistema from '../../MenuSistema';
 
-export default function ListProduto() {
+export default function ListProduto () {
 
-    const [lista, setLista] = useState([]);
+    const [listaProdutos, setListaProdutos] = useState([]);
     const [openModal, setOpenModal] = useState(false);
     const [idRemover, setIdRemover] = useState();
-
+    const [idCategoria, setIdCategoria] = useState();
+    const [listaCategoriaProduto, setListaCategoriaProduto] = useState([]);
 
     useEffect(() => {
+
         carregarLista();
+        
     }, [])
 
-    function carregarLista() {
+    function carregarLista () {
 
         axios.get("http://localhost:8080/api/produto")
-            .then((response) => {
-                setLista(response.data)
-            })
+        .then((response) => {
+            setListaProdutos(response.data);
+        })
+
+        axios.get("http://localhost:8080/api/categoriaproduto")
+        .then((response) => {
+
+            const dropDownCategorias = [];
+            dropDownCategorias.push({ text: '', value: '' });
+            response.data.map(c => (
+                dropDownCategorias.push({ text: c.descricao, value: c.id })
+            ))
+
+            setListaCategoriaProduto(dropDownCategorias)
+          
+        })
+
     }
+
+    function confirmaRemover(id) {
+
+        setOpenModal(true);
+        setIdRemover(id);
+    }
+
     async function remover() {
 
         await axios.delete('http://localhost:8080/api/produto/' + idRemover)
+        .then((response) => {
+   
+            setOpenModal(false)
+            console.log('Produto removido com sucesso.')
+   
+            axios.get("http://localhost:8080/api/produto")
             .then((response) => {
-
-                console.log('Produto removido com sucesso.')
-
-                axios.get("http://localhost:8080/api/produto")
-                    .then((response) => {
-                        setLista(response.data)
-                    })
+                setListaProdutos(response.data)
             })
-            .catch((error) => {
-                console.log('Erro ao remover um produto.')
-            })
-        setOpenModal(false)
+        })
+        .catch((error) => {
+            setOpenModal(false)
+            console.log('Erro ao remover um produto.')
+        })
     }
 
+    
 
+    function handleChangeCategoriaProduto(value) {
 
-    function confirmaRemover(id) {
-        setOpenModal(true)
-        setIdRemover(id)
+        setIdCategoria(value);
+        filtrarProdutos();
     }
 
     return (
@@ -74,6 +100,7 @@ export default function ListProduto() {
                             <Table.Header>
                                 <Table.Row>
                                     <Table.HeaderCell>codigo</Table.HeaderCell>
+                                    <Table.HeaderCell>Categoria</Table.HeaderCell>
                                     <Table.HeaderCell>Titulo</Table.HeaderCell>
                                     <Table.HeaderCell>Descrição</Table.HeaderCell>
                                     <Table.HeaderCell>Valor Unitario</Table.HeaderCell>
@@ -90,6 +117,7 @@ export default function ListProduto() {
 
                                     <Table.Row key={produto.id}>
                                         <Table.Cell>{produto.codigo}</Table.Cell>
+                                         <Table.Cell>{produto.categoria.descricao}</Table.Cell> 
                                         <Table.Cell>{produto.titulo}</Table.Cell>
                                         <Table.Cell>{produto.descricao}</Table.Cell>
                                         <Table.Cell>{produto.valorUnitario}</Table.Cell>
