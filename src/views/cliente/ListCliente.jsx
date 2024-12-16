@@ -1,14 +1,15 @@
 import axios from 'axios';
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Button, Container, Divider, Header, Icon, Modal, Table } from 'semantic-ui-react';
+import { Button, Container, Divider, Header, Icon, Modal, ModalContent, Table } from 'semantic-ui-react';
 import MenuSistema from '../../MenuSistema';
 
-export default function ListCliente () {
+export default function ListCliente() {
 
-   const [lista, setLista] = useState([]);
-   const [openModal, setOpenModal] = useState(false);
-   const [idRemover, setIdRemover] = useState();
+    const [lista, setLista] = useState([]);
+    const [openModal, setOpenModal] = useState(false);
+    const [idRemover, setIdRemover] = useState();
+    const [enderecoCliente, setEnderecoCliente] = useState();
 
     useEffect(() => {
 
@@ -19,16 +20,22 @@ export default function ListCliente () {
     function carregarLista() {
 
         axios.get("http://localhost:8080/api/cliente")
-        .then((response) => {
-            setLista(response.data)
-        })
-        
+            .then((response) => {
+                setLista(response.data)
+            })
+
     }
 
     function confirmaRemover(id) {
 
         setOpenModal(true)
         setIdRemover(id)
+    }
+
+    function enderecoCliente() {
+
+        setEnderecoCliente(id);
+        setOpenModal(true)
     }
 
     function formatarData(dataParam) {
@@ -44,37 +51,37 @@ export default function ListCliente () {
     async function remover() {
 
         await axios.delete('http://localhost:8080/api/cliente/' + idRemover)
-        .then((response) => {
-  
-            console.log('Cliente removido com sucesso.')
-  
-            axios.get("http://localhost:8080/api/cliente")
             .then((response) => {
-                setLista(response.data)
+
+                console.log('Cliente removido com sucesso.')
+
+                axios.get("http://localhost:8080/api/cliente")
+                    .then((response) => {
+                        setLista(response.data)
+                    })
             })
-        })
-        .catch((error) => {
-            console.log('Erro ao remover um cliente.')
-        })
-        
+            .catch((error) => {
+                console.log('Erro ao remover um cliente.')
+            })
+
         setOpenModal(false)
     }
 
-    return(
+    return (
 
         <div>
 
             <MenuSistema tela={'cliente'} />
 
-            <div style={{marginTop: '3%'}}>
- 
+            <div style={{ marginTop: '3%' }}>
+
                 <Container textAlign='justified' >
- 
+
                     <h2> Cliente </h2>
-                    
+
                     <Divider />
- 
-                    <div style={{marginTop: '4%'}}>
+
+                    <div style={{ marginTop: '4%' }}>
                         <Button
                             label='Novo'
                             circular
@@ -85,8 +92,8 @@ export default function ListCliente () {
                             to='/form-cliente'
                         />
 
-                        <br/><br/><br/>
-                  
+                        <br /><br /><br />
+
                         <Table color='orange' sortable celled>
 
                             <Table.Header>
@@ -99,10 +106,10 @@ export default function ListCliente () {
                                     <Table.HeaderCell textAlign='center'>Ações</Table.HeaderCell>
                                 </Table.Row>
                             </Table.Header>
-                 
+
                             <Table.Body>
 
-                                { lista.map(cliente => (
+                                {lista.map(cliente => (
 
                                     <Table.Row key={cliente.id}>
                                         <Table.Cell>{cliente.nome}</Table.Cell>
@@ -118,7 +125,7 @@ export default function ListCliente () {
                                                 color='green'
                                                 title='Clique aqui para editar os dados deste cliente'
                                                 icon>
-                                                    <Link to="/form-cliente" state={{id: cliente.id}} style={{color: 'green'}}> <Icon name='edit' /> </Link>
+                                                <Link to="/form-cliente" state={{ id: cliente.id }} style={{ color: 'green' }}> <Icon name='edit' /> </Link>
                                             </Button> &nbsp;
 
                                             <Button
@@ -128,8 +135,18 @@ export default function ListCliente () {
                                                 title='Clique aqui para remover este cliente'
                                                 icon
                                                 onClick={e => confirmaRemover(cliente.id)}>
-                                                    <Icon name='trash' />
+                                                <Icon name='trash' />
                                             </Button>
+                                            <Button
+                                                inverted
+                                                circular
+                                                color='green'
+                                                title='Clique aqui para verificar endereço de cliente'
+                                                icon
+                                                onClick={e => enderecoCliente(cliente.id)}>
+                                                <Icon name='eye dropper' />
+                                            </Button>
+
 
                                         </Table.Cell>
                                     </Table.Row>
@@ -149,7 +166,7 @@ export default function ListCliente () {
             >
                 <Header icon>
                     <Icon name='trash' />
-                    <div style={{marginTop: '5%'}}> Tem certeza que deseja remover esse registro? </div>
+                    <div style={{ marginTop: '5%' }}> Tem certeza que deseja remover esse registro? </div>
                 </Header>
                 <Modal.Actions>
                     <Button basic color='red' inverted onClick={() => setOpenModal(false)}>
@@ -160,6 +177,42 @@ export default function ListCliente () {
                     </Button>
                 </Modal.Actions>
             </Modal>
+
+            <Modal>
+                basic
+                onClose={() => setOpenModal(false)}
+                onOpen={() => setOpenModal(true)}
+                open={openModal}
+
+                <Header icon>
+                    <Icon name='eye dropper' />
+                    <div style={{ marginTop: '5%' }}> Detalhes do Endereço Do Cliente</div>
+                </Header>
+
+                <ModalContent>
+                    {selectedEnderecoCliente && (
+                        <div>
+                            <p><strong>Rua:</strong> {selectedEnderecoCliente.rua}</p>
+                            <p><strong>Numero:</strong> {selectedEnderecoCliente.numero}</p>
+                            <p><strong>Bairro:</strong> {selectedEnderecoCliente.bairro}</p>
+                            <p><strong>Cep:</strong> {selectedEnderecoCliente.cep}</p>
+                            <p><strong>Cidade:</strong> {selectedEnderecoCliente.cidade}</p>
+                            <p><strong>Estado:</strong> {selectedEnderecoCliente.estado}</p>
+                            <p><strong>Complemento:</strong> {selectedEnderecoCliente.complemento}</p>
+
+                        </div>
+                    )}
+                </ModalContent>
+
+                <Modal.Actions>
+                    <Button basic color="red" inverted onClick={handleClose}>
+                        <Icon name="remove" /> Fechar
+                    </Button>
+                </Modal.Actions>
+
+            </Modal>
+
+
 
         </div>
     )

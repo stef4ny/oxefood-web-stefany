@@ -192,9 +192,6 @@ export default function ListEntregador() {
                    <Button basic color='red' inverted onClick={() => setOpenModal(false)}>
                        <Icon name='remove' /> Não
                    </Button>
-                   <Button color='green' inverted onClick={() => remover()}>
-                       <Icon name='checkmark' /> Sim
-                   </Button>
                </Modal.Actions>
                 
             </Modal>
