@@ -9,7 +9,7 @@ export default function ListCliente() {
     const [lista, setLista] = useState([]);
     const [openModal, setOpenModal] = useState(false);
     const [idRemover, setIdRemover] = useState();
-    const [enderecoCliente, setEnderecoCliente] = useState();
+    
 
     useEffect(() => {
 
@@ -32,11 +32,7 @@ export default function ListCliente() {
         setIdRemover(id)
     }
 
-    function enderecoCliente() {
-
-        setEnderecoCliente(id);
-        setOpenModal(true)
-    }
+  
 
     function formatarData(dataParam) {
 
@@ -137,15 +133,7 @@ export default function ListCliente() {
                                                 onClick={e => confirmaRemover(cliente.id)}>
                                                 <Icon name='trash' />
                                             </Button>
-                                            <Button
-                                                inverted
-                                                circular
-                                                color='green'
-                                                title='Clique aqui para verificar endereço de cliente'
-                                                icon
-                                                onClick={e => enderecoCliente(cliente.id)}>
-                                                <Icon name='eye dropper' />
-                                            </Button>
+                                           
 
 
                                         </Table.Cell>
@@ -178,40 +166,7 @@ export default function ListCliente() {
                 </Modal.Actions>
             </Modal>
 
-            <Modal>
-                basic
-                onClose={() => setOpenModal(false)}
-                onOpen={() => setOpenModal(true)}
-                open={openModal}
-
-                <Header icon>
-                    <Icon name='eye dropper' />
-                    <div style={{ marginTop: '5%' }}> Detalhes do Endereço Do Cliente</div>
-                </Header>
-
-                <ModalContent>
-                    {selectedEnderecoCliente && (
-                        <div>
-                            <p><strong>Rua:</strong> {selectedEnderecoCliente.rua}</p>
-                            <p><strong>Numero:</strong> {selectedEnderecoCliente.numero}</p>
-                            <p><strong>Bairro:</strong> {selectedEnderecoCliente.bairro}</p>
-                            <p><strong>Cep:</strong> {selectedEnderecoCliente.cep}</p>
-                            <p><strong>Cidade:</strong> {selectedEnderecoCliente.cidade}</p>
-                            <p><strong>Estado:</strong> {selectedEnderecoCliente.estado}</p>
-                            <p><strong>Complemento:</strong> {selectedEnderecoCliente.complemento}</p>
-
-                        </div>
-                    )}
-                </ModalContent>
-
-                <Modal.Actions>
-                    <Button basic color="red" inverted onClick={handleClose}>
-                        <Icon name="remove" /> Fechar
-                    </Button>
-                </Modal.Actions>
-
-            </Modal>
-
+            
 
 
         </div>

@@ -11,73 +11,62 @@ export default function ListVenda() {
     const [idRemover, setIdRemover] = useState();
     const [selectedVenda, setSelectedVenda] = useState(null);
 
-
     useEffect(() => {
         carregarLista();
-    }, [])
+    }, []);
 
     function carregarLista() {
-
         axios.get("http://localhost:8080/api/venda")
             .then((response) => {
-                setLista(response.data)
-            })
+                setLista(response.data);
+            });
     }
-    function formatarData(dataParam) {
 
+    function formatarData(dataParam) {
         if (dataParam === null || dataParam === '' || dataParam === undefined) {
-            return ''
+            return '';
         }
 
         let arrayData = dataParam.split('-');
         return arrayData[2] + '/' + arrayData[1] + '/' + arrayData[0];
     }
 
-
     function confirmaRemover(id) {
-        setOpenModal(true)
-        setIdRemover(id)
+        setOpenModal(true);
+        setIdRemover(id);
     }
-
-   
 
     async function remover() {
-
         await axios.delete('http://localhost:8080/api/venda/' + idRemover)
-        .then((response) => {
-  
-            console.log('Venda removido com sucesso.')
-  
-            axios.get("http://localhost:8080/api/venda")
             .then((response) => {
-                setLista(response.data)
+                console.log('Venda removida com sucesso.');
+                axios.get("http://localhost:8080/api/venda")
+                    .then((response) => {
+                        setLista(response.data);
+                    });
             })
-        })
-        .catch((error) => {
-            console.log('Erro ao remover um venda.')
-        })
-        setOpenModal(false)
+            .catch((error) => {
+                console.log('Erro ao remover uma venda.');
+            });
+        setOpenModal(false);
     }
 
-    function exibirDetalhes(entregador) {
-        setSelectedVenda(entregador);
-        setOpenModal(true); 
+    function exibirDetalhes(venda) {
+        setSelectedVenda(venda);
+        setOpenModal(true);
     }
- 
 
     return (
         <div>
             <MenuSistema tela={'venda'} />
             <div style={{ marginTop: '3%' }}>
-
-                <Container textAlign='justified' >
-
-                    <h2> Venda </h2>
+                <Container textAlign='justified'>
+                    <h2>Venda</h2>
                     <Divider />
 
                     <div style={{ marginTop: '4%' }}>
                         <Button
-                            label='Novo'
+                            content='Novo'
                             circular
                             color='orange'
                             icon='clipboard outline'
@@ -88,7 +77,6 @@ export default function ListVenda() {
                         <br /><br /><br />
 
                         <Table color='orange' sortable celled>
-
                             <Table.Header>
                                 <Table.Row>
                                     <Table.HeaderCell>cliente</Table.HeaderCell>
@@ -103,9 +91,7 @@ export default function ListVenda() {
                             </Table.Header>
 
                             <Table.Body>
-
                                 {lista.map(venda => (
-
                                     <Table.Row key={venda.id}>
                                         <Table.Cell>{venda.cliente}</Table.Cell>
                                         <Table.Cell>{venda.produto}</Table.Cell>
@@ -119,9 +105,11 @@ export default function ListVenda() {
                                                 inverted
                                                 circular
                                                 color='green'
-                                                title='Clique aqui para editar os dados deste venda'
+                                                title='Clique aqui para editar os dados desta venda'
                                                 icon>
-                                                <Link to="/form-venda" state={{ id: venda.id }} style={{ color: 'green' }}> <Icon name='edit' /> </Link>
+                                                <Link to="/form-venda" state={{ id: venda.id }} style={{ color: 'green' }}>
+                                                    <Icon name='edit' />
+                                                </Link>
                                             </Button>
                                             &nbsp;
 
@@ -129,29 +117,24 @@ export default function ListVenda() {
                                                 inverted
                                                 circular
                                                 color='red'
-                                                title='Clique aqui para remover este venda'
+                                                title='Clique aqui para remover esta venda'
                                                 icon
                                                 onClick={e => confirmaRemover(venda.id)}>
                                                 <Icon name='trash' />
                                             </Button>
 
-                                            
                                             <Button
                                                 inverted
                                                 circular
                                                 color='blue'
-                                                title='Clique aqui para remover este venda'
+                                                title='Clique aqui para ver os detalhes desta venda'
                                                 icon
-                                                onClick={e => exibirDetalhes(venda.id)}>
+                                                onClick={e => exibirDetalhes(venda)}>
                                                 <Icon name='eye' />
                                             </Button>
-
-
-
                                         </Table.Cell>
                                     </Table.Row>
                                 ))}
-
                             </Table.Body>
                         </Table>
                     </div>
@@ -159,26 +142,26 @@ export default function ListVenda() {
             </div>
 
             <Modal
-               basic
-               onClose={() => setOpenModal(false)}
-               onOpen={() => setOpenModal(true)}
-               open={openModal}
-         >
-               <Header icon>
-                   <Icon name='trash' />
-                   <div style={{marginTop: '5%'}}> Tem certeza que deseja remover esse registro? </div>
-               </Header>
-               <Modal.Actions>
-                   <Button basic color='red' inverted onClick={() => setOpenModal(false)}>
-                       <Icon name='remove' /> Não
-                   </Button>
-                   <Button color='green' inverted onClick={() => remover()}>
-                       <Icon name='checkmark' /> Sim
-                   </Button>
-               </Modal.Actions>
-         </Modal>
+                basic
+                onClose={() => setOpenModal(false)}
+                onOpen={() => setOpenModal(true)}
+                open={openModal}
+            >
+                <Header icon>
+                    <Icon name='trash' />
+                    <div style={{ marginTop: '5%' }}>Tem certeza que deseja remover esse registro?</div>
+                </Header>
+                <Modal.Actions>
+                    <Button basic color='red' inverted onClick={() => setOpenModal(false)}>
+                        <Icon name='remove' /> Não
+                    </Button>
+                    <Button color='green' inverted onClick={() => remover()}>
+                        <Icon name='checkmark' /> Sim
+                    </Button>
+                </Modal.Actions>
+            </Modal>
 
-         <Modal
+            <Modal
                 open={selectedVenda !== null}
                 onClose={() => setSelectedVenda(null)}
             >
@@ -187,16 +170,14 @@ export default function ListVenda() {
                     Detalhes da Venda
                 </Header>
                 <Modal.Content>
-                    {selectedVenda &&  (
+                    {selectedVenda && (
                         <div>
                             <p><strong>Observação:</strong> {selectedVenda.observacao}</p>
                           
                         </div>
                     )}
-                </Modal.Content> 
+                </Modal.Content>
             </Modal>
-
-
         </div>
-    )
+    );
 }
