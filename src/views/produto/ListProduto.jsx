@@ -9,9 +9,6 @@ export default function ListProduto () {
     const [listaProdutos, setListaProdutos] = useState([]);
     const [openModal, setOpenModal] = useState(false);
     const [idRemover, setIdRemover] = useState();
-    const [menuFiltro, setMenuFiltro] = useState();
-    const [codigo, setCodigo] = useState();
-    const [titulo, setTitulo] = useState();
     const [idCategoria, setIdCategoria] = useState();
     const [listaCategoriaProduto, setListaCategoriaProduto] = useState([]);
 
@@ -96,57 +93,6 @@ export default function ListProduto () {
                     <div style={{marginTop: '4%'}}>
 
                         
-
-                        <Button
-                            label='Novo'
-                            circular
-                            color='orange'
-                            icon='clipboard outline'
-                            floated='right'
-                            as={Link} 
-                            to='/form-produto'
-                        />
-
-                        { menuFiltro ?
-                            
-                            <Segment>
-                                <Form className="form-filtros">
-                                    
-                                    <Form.Input
-                                        icon="search"
-                                        value={codigo}
-                                        onChange={() => handleChangeCodigo()}
-                                        label='Código do Produto'
-                                        placeholder='Filtrar por Código do Produto'
-                                        labelPosition='left'
-                                        width={4}
-                                    />
-                                    
-                                    <Form.Group widths='equal'> 
-                                    
-                                        <Form.Input
-                                            icon="search"
-                                            value={titulo}
-                                            onChange={() => handleChangeTitulo()}
-                                            label='Título'
-                                            placeholder='Filtrar por título'
-                                            labelPosition='left'
-                                        />
-                                        
-                                        <Form.Select
-                                            placeholder='Filtrar por Categoria'
-                                            label='Categoria'
-                                            options={listaCategoriaProduto}
-                                            value={idCategoria}
-                                            onChange={() => handleChangeCategoriaProduto()}
-                                        />
-                                        
-                                    </Form.Group>
-                                </Form>
-                            </Segment>:""
-                        }
-
-                        <br/><br/>
                     
                         <Table color='orange' sortable celled>
 
