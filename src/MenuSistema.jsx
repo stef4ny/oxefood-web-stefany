@@ -19,14 +19,12 @@ export default function MenuSistema(props) {
                     content='Cliente'
                     active={props.tela === 'cliente'}
                     as={Link}
-                    // to='/form-cliente'
                     to='/list-cliente'
                 />
                 <Menu.Item
                     content='Produto'
                     active={props.tela === 'produto'}
                     as={Link}
-                    //to='/form-produto'
                     to='/list-produto'
                 />
 
@@ -34,18 +32,22 @@ export default function MenuSistema(props) {
                     content='Entregador'
                     active={props.tela === 'entregador'}
                     as={Link}
-                    //to='/form-entregador'
                     to='/list-entregador'
                 />
 
                 <Menu.Item
-                    content='Venda'
-                    active={props.tela === 'venda'}
+                    content='Categoria Produto'
+                    active={props.tela === 'categoriaProduto'}
                     as={Link}
-                    //to='/form-entregador'
-                    to='/list-venda'
+                    to='/list-categoriaproduto'
                 />
-
+                               
+                    {/* <Menu.Item
+                        content='Venda'
+                        active={props.tela === 'venda'}
+                        as={Link}
+                        to='/list-venda'
+                    />  */}
             </Menu>
         </>
     )

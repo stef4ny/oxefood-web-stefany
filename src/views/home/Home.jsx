@@ -19,8 +19,8 @@ export default function Home () {
                               
                                Bem vindo ao sistema <strong>OxeFood</strong> ! <br/>
                                Este sistema foi desenvolvido na disciplina de Desenvolvimento para WEB III. <br/> <br/>
-                               Para acessar o código da <strong>API</strong> do sistema, acesse: <a href='https://github.com/robertoalencar/oxefood-api' target='_blank'> https://github.com/robertoalencar/oxefood-api </a> <br/> <br/>
-                               Para acessar o código do <strong>Módulo WEB</strong>, acesse: <a href='https://github.com/robertoalencar/oxefood-web' target='_blank'> https://github.com/robertoalencar/oxefood-web </a>
+                               Para acessar o código da <strong>API</strong> do sistema, acesse: <a href='https://github.com/stef4ny/oxefood-api-stefany' target='_blank'> https://github.com/stef4ny/oxefood-api-stefany </a> <br/> <br/>
+                               Para acessar o código do <strong>Módulo WEB</strong>, acesse: <a href='https://github.com/stef4ny/oxefood-web-stefany' target='_blank'> https://github.com/stef4ny/oxefood-web-stefany </a>
 
                            </Grid.Column>
                        </Grid.Row>

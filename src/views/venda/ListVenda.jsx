@@ -8,65 +8,73 @@ export default function ListVenda() {
 
     const [lista, setLista] = useState([]);
     const [openModal, setOpenModal] = useState(false);
-    const [idRemover, setIdRemover] = useState();
-    const [selectedVenda, setSelectedVenda] = useState(null);
+    const [modalObservacao, setModalObservacao] = useState (false);
+    const [idRemoverVenda, setIdRemoverVenda] = useState();
+
 
     useEffect(() => {
         carregarLista();
-    }, []);
+    }, [])
 
     function carregarLista() {
+
         axios.get("http://localhost:8080/api/venda")
             .then((response) => {
-                setLista(response.data);
-            });
+                setLista(response.data)
+            })
+    }
+
+    function confirmaRemover(id) {
+        setOpenModal(true)
+        setIdRemoverVenda(id)
+    }
+
+    function confirmaVisualizar(id) {
+        setModalObservacao(id);
     }
 
     function formatarData(dataParam) {
+
         if (dataParam === null || dataParam === '' || dataParam === undefined) {
-            return '';
+            return ''
         }
 
         let arrayData = dataParam.split('-');
         return arrayData[2] + '/' + arrayData[1] + '/' + arrayData[0];
     }
 
-    function confirmaRemover(id) {
-        setOpenModal(true);
-        setIdRemover(id);
-    }
-
     async function remover() {
-        await axios.delete('http://localhost:8080/api/venda/' + idRemover)
-            .then((response) => {
-                console.log('Venda removida com sucesso.');
-                axios.get("http://localhost:8080/api/venda")
-                    .then((response) => {
-                        setLista(response.data);
-                    });
-            })
-            .catch((error) => {
-                console.log('Erro ao remover uma venda.');
-            });
-        setOpenModal(false);
-    }
 
-    function exibirDetalhes(venda) {
-        setSelectedVenda(venda);
-        setOpenModal(true);
+        await axios.delete('http://localhost:8080/api/venda/' + idRemoverVenda)
+        .then((response) => {
+            alert('Venda removida com sucesso.');
+            console.log('Venda removida com sucesso.');
+  
+            axios.get("http://localhost:8080/api/venda")
+            .then((response) => {
+                setLista(response.data);
+            })
+        })
+        .catch((error) => {
+            alert('Erro ao remover uma venda.');
+            console.log('Erro ao remover um venda.');
+        })
+        setOpenModal(false);
     }
 
     return (
         <div>
             <MenuSistema tela={'venda'} />
             <div style={{ marginTop: '3%' }}>
-                <Container textAlign='justified'>
-                    <h2>Venda</h2>
+
+                <Container textAlign='justified' >
+
+                    <h2> Venda </h2>
                     <Divider />
 
                     <div style={{ marginTop: '4%' }}>
                         <Button
-                            content='Novo'
+                            label='Novo'
                             circular
                             color='orange'
                             icon='clipboard outline'
@@ -77,70 +85,68 @@ export default function ListVenda() {
                         <br /><br /><br />
 
                         <Table color='orange' sortable celled>
+
                             <Table.Header>
                                 <Table.Row>
-                                    <Table.HeaderCell>cliente</Table.HeaderCell>
-                                    <Table.HeaderCell>produto</Table.HeaderCell>
-                                    <Table.HeaderCell>status venda</Table.HeaderCell>
-                                    <Table.HeaderCell>data venda</Table.HeaderCell>
-                                    <Table.HeaderCell>valor total</Table.HeaderCell>
-                                    <Table.HeaderCell>observacao</Table.HeaderCell>
-                                    <Table.HeaderCell>retirada em loja</Table.HeaderCell>
+                                    <Table.HeaderCell>Cliente</Table.HeaderCell>
+                                    <Table.HeaderCell>Produto</Table.HeaderCell>
+                                    <Table.HeaderCell>Status da Venda</Table.HeaderCell>
+                                    <Table.HeaderCell>Data da Venda</Table.HeaderCell>
+                                    <Table.HeaderCell>Valor Total</Table.HeaderCell>
+                                    <Table.HeaderCell>Retirada em Loja</Table.HeaderCell>
                                     <Table.HeaderCell textAlign='center'>Ações</Table.HeaderCell>
                                 </Table.Row>
                             </Table.Header>
 
                             <Table.Body>
+
                                 {lista.map(venda => (
+
                                     <Table.Row key={venda.id}>
                                         <Table.Cell>{venda.cliente}</Table.Cell>
                                         <Table.Cell>{venda.produto}</Table.Cell>
                                         <Table.Cell>{venda.statusVenda}</Table.Cell>
                                         <Table.Cell>{formatarData(venda.dataVenda)}</Table.Cell>
-                                        <Table.Cell>{venda.valorTotal}</Table.Cell>
-                                        <Table.Cell>{venda.observacao}</Table.Cell>
-                                        <Table.Cell>{venda.retiradaEmLoja}</Table.Cell>
+                                        <Table.Cell>{venda.valorTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</Table.Cell>
+                                        <Table.Cell>{venda.retiradaEmLoja ? "Sim" : "Não"}</Table.Cell>
                                         <Table.Cell textAlign='center'>
-                                            <Button
+
+                                            {/* <Button
                                                 inverted
                                                 circular
                                                 color='green'
-                                                title='Clique aqui para editar os dados desta venda'
+                                                title='Clique aqui para editar os dados deste cliente'
                                                 icon>
-                                                <Link to="/form-venda" state={{ id: venda.id }} style={{ color: 'green' }}>
-                                                    <Icon name='edit' />
-                                                </Link>
-                                            </Button>
+                                                <Link to="/form-venda" state={{ id: cliente.id }} style={{ color: 'green' }}> <Icon name='edit' /> </Link>
+                                            </Button> */}
                                             &nbsp;
-
                                             <Button
                                                 inverted
                                                 circular
                                                 color='red'
-                                                title='Clique aqui para remover esta venda'
+                                                title='Clique aqui para remover esta Venda'
                                                 icon
                                                 onClick={e => confirmaRemover(venda.id)}>
                                                 <Icon name='trash' />
                                             </Button>
-
                                             <Button
                                                 inverted
                                                 circular
                                                 color='blue'
-                                                title='Clique aqui para ver os detalhes desta venda'
+                                                title='Clique aqui para visualizar as observações'
                                                 icon
-                                                onClick={e => exibirDetalhes(venda)}>
+                                                onClick={e => confirmaVisualizar(venda)}>
                                                 <Icon name='eye' />
                                             </Button>
                                         </Table.Cell>
                                     </Table.Row>
                                 ))}
+
                             </Table.Body>
                         </Table>
                     </div>
                 </Container>
             </div>
-
             <Modal
                 basic
                 onClose={() => setOpenModal(false)}
@@ -149,7 +155,7 @@ export default function ListVenda() {
             >
                 <Header icon>
                     <Icon name='trash' />
-                    <div style={{ marginTop: '5%' }}>Tem certeza que deseja remover esse registro?</div>
+                    <div style={{ marginTop: '5%' }}> Tem certeza que deseja remover esse registro? </div>
                 </Header>
                 <Modal.Actions>
                     <Button basic color='red' inverted onClick={() => setOpenModal(false)}>
@@ -162,22 +168,27 @@ export default function ListVenda() {
             </Modal>
 
             <Modal
-                open={selectedVenda !== null}
-                onClose={() => setSelectedVenda(null)}
+                basic
+                onClose={() => setModalObservacao(false)}
+                onOpen={() => setModalObservacao(true)}
+                open={modalObservacao}
             >
-                <Header icon>
-                    <Icon name='eye' />
-                    Detalhes da Venda
-                </Header>
-                <Modal.Content>
-                    {selectedVenda && (
-                        <div>
-                            <p><strong>Observação:</strong> {selectedVenda.observacao}</p>
-                          
-                        </div>
-                    )}
-                </Modal.Content>
+                <Modal.Actions>
+                    
+                <Table color='orange' sortable celled>
+                    <Table.Header>
+                        <Table.Row>
+                            <Table.HeaderCell textAlign = "center"> Observações</Table.HeaderCell>
+                            
+                        </Table.Row>
+                    </Table.Header>
+                    <Table.Body>
+                        <Table.Cell textAlign = "center">{modalObservacao.observacao}</Table.Cell>  
+
+                    </Table.Body>
+                </Table>
+                </Modal.Actions>
             </Modal>
         </div>
-    );
+    )
 }
