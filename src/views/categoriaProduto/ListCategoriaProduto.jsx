@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button, Container, Divider, Icon, Table, Modal, Header } from 'semantic-ui-react';
-import { notifyError, notifySuccess } from '../../views/util/Util';
+import { notifyError, notifySuccess } from '../util/Util';
 import MenuSistema from '../../MenuSistema';
 
 export default function ListCategoriaProduto() {
