@@ -10,6 +10,13 @@ export default function ListProduto() {
     const [lista, setLista] = useState([]);
     const [openModal, setOpenModal] = useState(false);
     const [idRemover, setIdRemover] = useState();
+    const [menuFiltro, setMenuFiltro] = useState();
+    const [codigo, setCodigo] = useState();
+    const [titulo, setTitulo] = useState();
+    const [idCategoria, setIdCategoria] = useState();
+    const [listaCategoria, setListaCategoria] = useState([]);
+
+
 
     useEffect(() => {
         carregarLista();
@@ -21,7 +28,24 @@ export default function ListProduto() {
             .then((response) => {
                 setLista(response.data)
             })
+
+
+        axios.get("http://localhost:8080/api/categoriaproduto")
+            .then((response) => {
+
+                const dropDownCategorias = [];
+                dropDownCategorias.push({ text: '', value: '' });
+                response.data.map(c => (
+                    dropDownCategorias.push({ text: c.descricao, value: c.id })
+                ))
+
+                setListaCategoria(dropDownCategorias)
+
+            })
+
     }
+
+
 
     function confirmaRemover(id) {
         setOpenModal(true)
@@ -41,15 +65,62 @@ export default function ListProduto() {
             })
             .catch((error) => {
                 if (error.response.data.errors != undefined) {
-                                        for (let i = 0; i < error.response.data.errors.length; i++) {
-                                            notifyError(error.response.data.errors[i].defaultMessage)
-                                     }
-                             } else {
-                                 notifyError(error.response.data.message)
-                             }
+                    for (let i = 0; i < error.response.data.errors.length; i++) {
+                        notifyError(error.response.data.errors[i].defaultMessage)
+                    }
+                } else {
+                    notifyError(error.response.data.message)
+                }
             })
         setOpenModal(false);
     }
+
+    function handleMenuFiltro() {
+
+        if (menuFiltro === true) {
+            setMenuFiltro(false);
+        } else {
+            setMenuFiltro(true);
+        }
+    }
+
+    function handleChangeCodigo(value) {
+
+        filtrarProdutos(value, titulo, idCategoria);
+    }
+
+    function handleChangeTitulo(value) {
+
+        filtrarProdutos(codigo, value, idCategoria);
+    }
+
+    function handleChangeCategoriaProduto(value) {
+
+        filtrarProdutos(codigo, titulo, value);
+    }
+    async function filtrarProdutos(codigoParam, tituloParam, idCategoriaParam) {
+
+        let formData = new FormData();
+
+        if (codigoParam !== undefined) {
+            setCodigo(codigoParam)
+            formData.append('codigo', codigoParam);
+        }
+        if (tituloParam !== undefined) {
+            setTitulo(tituloParam)
+            formData.append('titulo', tituloParam);
+        }
+        if (idCategoriaParam !== undefined) {
+            setIdCategoria(idCategoriaParam)
+            formData.append('idCategoria', idCategoriaParam);
+        }
+
+        await axios.post("http://localhost:8080/api/produto/filtrar", formData)
+            .then((response) => {
+                setListaProdutos(response.data)
+            })
+    }
+
 
     return (
         <div>
@@ -62,6 +133,18 @@ export default function ListProduto() {
                     <Divider />
 
                     <div style={{ marginTop: '4%' }}>
+
+                        <Menu compact>
+                            <Menu.Item
+                                name='menuFiltro'
+                                active={menuFiltro === true}
+                                onClick={() => handleMenuFiltro()}
+                            >
+                                <Icon name='filter' />
+                                Filtrar
+                            </Menu.Item>
+                        </Menu>
+
                         <Button
                             label='Novo'
                             circular
@@ -71,6 +154,45 @@ export default function ListProduto() {
                             as={Link}
                             to='/form-produto'
                         />
+
+                        {menuFiltro ?
+
+                            <Segment>
+                                <Form className="form-filtros">
+
+                                    <Form.Input
+                                        icon="search"
+                                        value={codigo}
+                                        onChange={e => handleChangeCodigo(e.target.value)}
+                                        label='Código do Produto'
+                                        placeholder='Filtrar por Código do Produto'
+                                        labelPosition='left'
+                                        width={4}
+                                    />
+                                    <Form.Group widths='equal'>
+                                        <Form.Input
+                                            icon="search"
+                                            value={titulo}
+                                            onChange={e => handleChangeTitulo(e.target.value)}
+                                            label='Título'
+                                            placeholder='Filtrar por título'
+                                            labelPosition='left'
+                                        />
+                                        <Form.Select
+                                            placeholder='Filtrar por Categoria'
+                                            label='Categoria'
+                                            options={listaCategoria}
+                                            value={idCategoria}
+                                            onChange={(e, { value }) => {
+                                                handleChangeCategoriaProduto(value)
+                                            }}
+                                        />
+
+                                    </Form.Group>
+                                </Form>
+                            </Segment> : ""
+                        }
+
                         <br /><br /><br />
 
                         <Table color='orange' sortable celled>
@@ -98,8 +220,8 @@ export default function ListProduto() {
                                         <Table.Cell>{produto.titulo}</Table.Cell>
                                         <Table.Cell>{produto.descricao}</Table.Cell>
                                         <Table.Cell>{produto.valorUnitario.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}     </Table.Cell>
-                                        <Table.Cell>{produto.tempoEntregaMinimo} Min</Table.Cell>
-                                        <Table.Cell>{produto.tempoEntregaMaximo} Min</Table.Cell>
+                                        <Table.Cell>{produto.tempoEntregaMinimo}</Table.Cell>
+                                        <Table.Cell>{produto.tempoEntregaMaximo}</Table.Cell>
                                         <Table.Cell textAlign='center'>
 
                                             <Button

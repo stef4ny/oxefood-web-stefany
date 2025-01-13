@@ -1,15 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import axios from "axios";
-import {
-  Button,
-  Container,
-  Divider,
-  Form,
-  FormGroup,
-  Icon,
-  TextArea,
-} from "semantic-ui-react";
+import {Button, Container, Divider, Form, FormGroup, Icon, TextArea,} 
+from "semantic-ui-react";
 import { notifyError, notifySuccess } from "../../views/util/Util";
 import MenuSistema from "../../MenuSistema";
 
